@@ -9,4 +9,4 @@ provider:
 
 functions:
   hello:
-    handler: handler.hello
+    handler: src/expense/functions/handler.hello
