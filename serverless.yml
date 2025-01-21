@@ -1,0 +1,15 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: eduardorvieira
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: moneymind
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+
+plugins:
+  - serverless-offline
+
+functions:
+  hello:
+    handler: src/expense/functions/handler.hello
