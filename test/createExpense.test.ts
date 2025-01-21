@@ -24,19 +24,19 @@ describe('create expense', () => {
 
         const { statusCode, body } = result
 
+        const parsedBody = JSON.parse(body);
+
         expect(statusCode).toBe(200)
-        expect(body).toBe(
-            JSON.stringify({
-                message: 'Expense created successfully',
-                expense: {
-                    id: expect.any(String),
-                    name: 'Bread',
-                    amount: 100,
-                    date: '2021-06-01',
-                    category: 'Food',
-                    description: 'Lunch'
-                }
-            })
-        )
+        expect(parsedBody).toEqual({
+            message: 'Expense created successfully',
+            expense: {
+                id: expect.any(String),
+                name: 'Bread',
+                amount: 100,
+                date: '2021-06-01',
+                category: 'Food',
+                description: 'Lunch'
+            }
+        })
     })
 })
