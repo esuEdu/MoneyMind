@@ -1,25 +1,32 @@
-//middy
-import middy from '@middy/core'
-import httpJsonBodyParser from '@middy/http-json-body-parser';
-import httpCors from '@middy/http-cors';
-import httpErrorHandler from "@middy/http-error-handler";
-
 // AWS
-import { APIGatewayProxyHandler } from 'aws-lambda';
+import { APIGatewayProxyHandler } from "aws-lambda";
 
 //Service
+import { createExpenseService } from "../expense.service";
 
-const createExpense: APIGatewayProxyHandler = async (event) => {
+export const handler: APIGatewayProxyHandler = async (event: any) => {
 
-    
+  const body = JSON.parse(event.body);
 
-    return {
-        statusCode: 200,
-        body: JSON.stringify({ message: `Hello, ${name}!` }),
+  try {
+    const expense = await createExpenseService(body);
+
+    const response = {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: "Expense created successfully",
+        expense: expense,
+      }),
     };
-}
-
-export const handler = middy(createExpense)
-    .use(httpCors())
-    .use(httpJsonBodyParser())
-    .use(httpErrorHandler());
+    return response;
+  } catch (error: Error | any) {
+    const response = {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: "Internal Server Error",
+        error: error.message,
+      }),
+    };
+    return response;
+  }
+};

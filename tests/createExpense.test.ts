@@ -1,16 +1,22 @@
 import { handler } from '../src/expense/functions/createExpense';
+import {
+    DynamoDBClient,
+    GetItemCommand,
+} from "@aws-sdk/client-dynamodb";
+import { unmarshall } from "@aws-sdk/util-dynamodb";
 
-import type { Expense } from '../src/expense/expense.model';
+const client = new DynamoDBClient({
+    region: "us-east-1",
+    endpoint: "http://localhost:8000",
+});
 
 const mockContext = {} as any
 
 describe('create expense', () => {
+
     it('should return a message with created object', async () => {
 
         const mockEvent = {
-            headers: {
-                'Content-Type': 'application/json'
-            },
             body: JSON.stringify({
                 name: 'Bread',
                 amount: 100,
@@ -20,12 +26,12 @@ describe('create expense', () => {
             })
         } as any
 
-        const result: any = await handler(mockEvent, mockContext);
+        const result: any = await handler(mockEvent, mockContext, () => {});
 
         const { statusCode, body } = result
 
         const parsedBody = JSON.parse(body);
-
+        
         expect(statusCode).toBe(200)
         expect(parsedBody).toEqual({
             message: 'Expense created successfully',
