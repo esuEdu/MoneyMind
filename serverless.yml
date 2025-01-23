@@ -46,5 +46,14 @@ functions:
       - http:
           method: get
           path: /expenses
+
+  updateExpense:
+    name: ${self:service}-updateExpense
+    handler: src/expense/functions/updateExpense.handler
+    events:
+      - http:
+          method: put
+          path: /expense
+
 resources:
   - ${file(resources/dynamoDB.yml)}

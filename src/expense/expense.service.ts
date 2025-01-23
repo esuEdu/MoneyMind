@@ -1,8 +1,9 @@
 import * as uuid from "uuid";
 
 import {
-    DynamoDBClient,
+	DynamoDBClient,
 	PutItemCommand,
+	UpdateItemCommand,
 	GetItemCommand,
 	ScanCommand,
 } from "@aws-sdk/client-dynamodb";
@@ -83,6 +84,55 @@ async function listExpensesService() {
 }
 
 async function updateExpenseService(payload: any) {
+	if (!payload.id) {
+		throw new Error("The 'id' field is required.");
+	}
+
+	// Prepare dynamic UpdateExpression
+	const updateExpressions: string[] = [];
+	const expressionAttributeNames: Record<string, string> = {};
+	const expressionAttributeValues: Record<string, any> = {};
+
+	for (const [key, value] of Object.entries(payload)) {
+		if (key !== "id" && value !== undefined) {
+			const attributeKey = `#${key}`;
+			const valueKey = `:${key}`;
+
+			updateExpressions.push(`${attributeKey} = ${valueKey}`);
+			expressionAttributeNames[attributeKey] = key;
+			expressionAttributeValues[valueKey] = value;
+		}
+	}
+
+	// If no fields to update, throw an error
+	if (updateExpressions.length === 0) {
+		throw new Error("No fields to update.");
+	}
+
+	// Construct the parameters
+	const params: any = {
+		TableName: "moneymind-Expense_Table",
+		Key: marshall({ id: payload.id }),
+		UpdateExpression: `SET ${updateExpressions.join(", ")}`,
+		ExpressionAttributeNames: expressionAttributeNames,
+		ExpressionAttributeValues: marshall(expressionAttributeValues),
+		ReturnValues: "ALL_NEW", // Return the updated item
+	};
+
+	// Update the item in the database
+	try {
+		const command = new UpdateItemCommand(params);
+		const response = await client.send(command);
+
+		if (!response.Attributes) {
+			throw new Error("Expense not found.");
+		}
+
+		return unmarshall(response.Attributes) as Expense;
+	} catch (error: any) {
+		console.error("Error updating expense:", error);
+		throw new Error(error.message || "Failed to update expense.");
+	}
 }
 
 export { createExpenseService, readExpenseService, listExpensesService, updateExpenseService };
