@@ -63,5 +63,15 @@ functions:
           method: delete
           path: /expense
 
+  # Income
+  createIncome:
+    name: ${self:service}-createIncome
+    handler: src/income/functions/createIncome.handler
+    events:
+      - http:
+          method: post
+          path: /income
+          
+
 resources:
   - ${file(resources/dynamoDB.yml)}

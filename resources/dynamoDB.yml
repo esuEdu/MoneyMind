@@ -13,3 +13,18 @@ Resources:
       OnDemandThroughput:
         MaxReadRequestUnits: 5
         MaxWriteRequestUnits: 5
+  
+  IncomeTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:service}-Income_Table
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      OnDemandThroughput:
+        MaxReadRequestUnits: 5
+        MaxWriteRequestUnits: 5
