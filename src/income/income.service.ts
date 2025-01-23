@@ -60,4 +60,29 @@ async function readIncomeService(payload: any) {
 	}
 }
 
-export { createIncomeService, readIncomeService };
+async function listIncomeService() {
+	//create the params object
+	const params: any = {
+		TableName: "moneymind-Income_Table",
+	};
+
+	//get the income from the database
+	try {
+		const command = new ScanCommand(params);
+		const response = await client.send(command);
+
+		const items = {
+			count: response.Count,
+			items: response.Items
+				? response.Items.map((item) => unmarshall(item))
+				: [],
+		};
+
+		return items;
+	} catch (error: Error | any) {
+		console.error(error);
+		throw new Error(error);
+	}
+}
+
+export { createIncomeService, readIncomeService, listIncomeService };

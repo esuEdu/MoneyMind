@@ -80,6 +80,13 @@ functions:
           method: get
           path: /income
 
+  listIncomes:
+    name: ${self:service}-listIncomes
+    handler: src/income/functions/listIncomes.handler
+    events:
+      - http:
+          method: get
+          path: /incomes
 
 resources:
   - ${file(resources/dynamoDB.yml)}
