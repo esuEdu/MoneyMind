@@ -31,5 +31,13 @@ functions:
           method: post
           path: /expense
 
+  readExpense:
+    name: ${self:service}-readExpense
+    handler: src/expense/functions/readExpense.handler
+    events:
+      - http:
+          method: get
+          path: /expense/{id}
+
 resources:
   - ${file(resources/dynamoDB.yml)}
