@@ -71,7 +71,15 @@ functions:
       - http:
           method: post
           path: /income
-          
+
+  readIncome:
+    name: ${self:service}-readIncome
+    handler: src/income/functions/readIncome.handler
+    events:
+      - http:
+          method: get
+          path: /income
+
 
 resources:
   - ${file(resources/dynamoDB.yml)}
