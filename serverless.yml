@@ -55,5 +55,13 @@ functions:
           method: put
           path: /expense
 
+  deleteExpense:
+    name: ${self:service}-deleteExpense
+    handler: src/expense/functions/deleteExpense.handler
+    events:
+      - http:
+          method: delete
+          path: /expense
+
 resources:
   - ${file(resources/dynamoDB.yml)}

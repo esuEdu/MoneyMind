@@ -6,6 +6,7 @@ import {
 	UpdateItemCommand,
 	GetItemCommand,
 	ScanCommand,
+	DeleteItemCommand,
 } from "@aws-sdk/client-dynamodb";
 
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
@@ -68,15 +69,18 @@ async function listExpensesService() {
 	//get the expenses from the database
 	try {
 		const command = new ScanCommand(params);
-        const { $metadata, ScannedCount, ...response } = await client.send(command);
-        
-        const items = {
-            count: response.Count,
-            items: response.Items ? response.Items.map(item => unmarshall(item)) : []
-        }
+		const { $metadata, ScannedCount, ...response } = await client.send(
+			command
+		);
 
-        return items;
-        
+		const items = {
+			count: response.Count,
+			items: response.Items
+				? response.Items.map((item) => unmarshall(item))
+				: [],
+		};
+
+		return items;
 	} catch (error: Error | any) {
 		console.error(error);
 		throw new Error(error);
@@ -135,4 +139,30 @@ async function updateExpenseService(payload: any) {
 	}
 }
 
-export { createExpenseService, readExpenseService, listExpensesService, updateExpenseService };
+async function deleteExpenseService(payload: any) {
+	//create the params object
+	const params: any = {
+		TableName: "moneymind-Expense_Table",
+		Key: {
+			id: marshall(payload),
+		},
+	};
+
+	//delete the expense from the database
+	try {
+		const command = new DeleteItemCommand(params);
+		await client.send(command);
+		return;
+	} catch (error: Error | any) {
+		console.error(error);
+		throw new Error(error);
+	}
+}
+
+export {
+	createExpenseService,
+	readExpenseService,
+	listExpensesService,
+	updateExpenseService,
+	deleteExpenseService,
+};
