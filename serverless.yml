@@ -88,5 +88,15 @@ functions:
           method: get
           path: /incomes
 
+  updateIncome:
+    name: ${self:service}-updateIncome
+    handler: src/income/functions/updateIncome.handler
+    events:
+      - http:
+          method: put
+          path: /income
+
+  
+
 resources:
   - ${file(resources/dynamoDB.yml)}
