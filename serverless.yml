@@ -6,10 +6,62 @@ service: moneymind
 provider:
   name: aws
   runtime: nodejs20.x
+  iam:
+    role:
+      statements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+          - dynamodb:Scan
+          - dynamodb:GetItem
+          - dynamodb:PutItem
+          - dynamodb:UpdateItem
+          - dynamodb:DeleteItem
+        Resource: "*"
 
 plugins:
   - serverless-offline
 
 functions:
-  hello:
-    handler: src/expense/functions/handler.hello
+  createExpense:
+    name: ${self:service}-createExpense
+    handler: src/expense/functions/createExpense.handler
+    events:
+      - http:
+          method: post
+          path: /expense
+
+  readExpense:
+    name: ${self:service}-readExpense
+    handler: src/expense/functions/readExpense.handler
+    events:
+      - http:
+          method: get
+          path: /expense
+
+  listExpenses:
+    name: ${self:service}-listExpenses
+    handler: src/expense/functions/listExpenses.handler
+    events:
+      - http:
+          method: get
+          path: /expenses
+
+  updateExpense:
+    name: ${self:service}-updateExpense
+    handler: src/expense/functions/updateExpense.handler
+    events:
+      - http:
+          method: put
+          path: /expense
+
+  deleteExpense:
+    name: ${self:service}-deleteExpense
+    handler: src/expense/functions/deleteExpense.handler
+    events:
+      - http:
+          method: delete
+          path: /expense
+
+resources:
+  - ${file(resources/dynamoDB.yml)}

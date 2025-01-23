@@ -1,0 +1,15 @@
+Resources:
+  ExpenseTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:service}-Expense_Table
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      OnDemandThroughput:
+        MaxReadRequestUnits: 5
+        MaxWriteRequestUnits: 5
