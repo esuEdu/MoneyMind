@@ -1,14 +1,4 @@
 import { handler } from '../src/expense/functions/createExpense';
-import {
-    DynamoDBClient,
-    GetItemCommand,
-} from "@aws-sdk/client-dynamodb";
-import { unmarshall } from "@aws-sdk/util-dynamodb";
-
-const client = new DynamoDBClient({
-    region: "us-east-1",
-    endpoint: "http://localhost:8000",
-});
 
 const mockContext = {} as any
 

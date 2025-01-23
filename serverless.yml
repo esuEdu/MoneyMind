@@ -37,7 +37,14 @@ functions:
     events:
       - http:
           method: get
-          path: /expense/{id}
+          path: /expense
 
+  listExpenses:
+    name: ${self:service}-listExpenses
+    handler: src/expense/functions/listExpenses.handler
+    events:
+      - http:
+          method: get
+          path: /expenses
 resources:
   - ${file(resources/dynamoDB.yml)}
