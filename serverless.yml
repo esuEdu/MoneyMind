@@ -4,99 +4,105 @@ org: eduardorvieira
 service: moneymind
 
 provider:
-  name: aws
-  runtime: nodejs20.x
-  iam:
-    role:
-      statements:
-      - Effect: Allow
-        Action:
-          - dynamodb:Query
-          - dynamodb:Scan
-          - dynamodb:GetItem
-          - dynamodb:PutItem
-          - dynamodb:UpdateItem
-          - dynamodb:DeleteItem
-        Resource: "*"
+    name: aws
+    runtime: nodejs20.x
+    iam:
+        role:
+            statements:
+                - Effect: Allow
+                  Action:
+                      - dynamodb:Query
+                      - dynamodb:Scan
+                      - dynamodb:GetItem
+                      - dynamodb:PutItem
+                      - dynamodb:UpdateItem
+                      - dynamodb:DeleteItem
+                  Resource: "*"
 
 plugins:
-  - serverless-offline
+    - serverless-offline
 
 functions:
-  createExpense:
-    name: ${self:service}-createExpense
-    handler: src/expense/functions/createExpense.handler
-    events:
-      - http:
-          method: post
-          path: /expense
+    createExpense:
+        name: ${self:service}-createExpense
+        handler: src/expense/functions/createExpense.handler
+        events:
+            - http:
+                  method: post
+                  path: /expense
 
-  readExpense:
-    name: ${self:service}-readExpense
-    handler: src/expense/functions/readExpense.handler
-    events:
-      - http:
-          method: get
-          path: /expense
+    readExpense:
+        name: ${self:service}-readExpense
+        handler: src/expense/functions/readExpense.handler
+        events:
+            - http:
+                  method: get
+                  path: /expense
 
-  listExpenses:
-    name: ${self:service}-listExpenses
-    handler: src/expense/functions/listExpenses.handler
-    events:
-      - http:
-          method: get
-          path: /expenses
+    listExpenses:
+        name: ${self:service}-listExpenses
+        handler: src/expense/functions/listExpenses.handler
+        events:
+            - http:
+                  method: get
+                  path: /expenses
 
-  updateExpense:
-    name: ${self:service}-updateExpense
-    handler: src/expense/functions/updateExpense.handler
-    events:
-      - http:
-          method: put
-          path: /expense
+    updateExpense:
+        name: ${self:service}-updateExpense
+        handler: src/expense/functions/updateExpense.handler
+        events:
+            - http:
+                  method: put
+                  path: /expense
 
-  deleteExpense:
-    name: ${self:service}-deleteExpense
-    handler: src/expense/functions/deleteExpense.handler
-    events:
-      - http:
-          method: delete
-          path: /expense
+    deleteExpense:
+        name: ${self:service}-deleteExpense
+        handler: src/expense/functions/deleteExpense.handler
+        events:
+            - http:
+                  method: delete
+                  path: /expense
 
-  # Income
-  createIncome:
-    name: ${self:service}-createIncome
-    handler: src/income/functions/createIncome.handler
-    events:
-      - http:
-          method: post
-          path: /income
+    # Income
+    createIncome:
+        name: ${self:service}-createIncome
+        handler: src/income/functions/createIncome.handler
+        events:
+            - http:
+                  method: post
+                  path: /income
 
-  readIncome:
-    name: ${self:service}-readIncome
-    handler: src/income/functions/readIncome.handler
-    events:
-      - http:
-          method: get
-          path: /income
+    readIncome:
+        name: ${self:service}-readIncome
+        handler: src/income/functions/readIncome.handler
+        events:
+            - http:
+                  method: get
+                  path: /income
 
-  listIncomes:
-    name: ${self:service}-listIncomes
-    handler: src/income/functions/listIncomes.handler
-    events:
-      - http:
-          method: get
-          path: /incomes
+    listIncomes:
+        name: ${self:service}-listIncomes
+        handler: src/income/functions/listIncomes.handler
+        events:
+            - http:
+                  method: get
+                  path: /incomes
 
-  updateIncome:
-    name: ${self:service}-updateIncome
-    handler: src/income/functions/updateIncome.handler
-    events:
-      - http:
-          method: put
-          path: /income
+    updateIncome:
+        name: ${self:service}-updateIncome
+        handler: src/income/functions/updateIncome.handler
+        events:
+            - http:
+                  method: put
+                  path: /income
 
-  
+    deleteIncome:
+        name: ${self:service}-deleteIncome
+        handler: src/income/functions/deleteIncome.handler
+        events:
+            - http:
+                  method: delete
+                  path: /income
 
 resources:
-  - ${file(resources/dynamoDB.yml)}
+    - ${file(resources/dynamoDB.yml)}
